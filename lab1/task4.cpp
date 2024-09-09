@@ -23,6 +23,11 @@ int main()
     std::cout << "Replaceing elements:" << std::endl;
     Array = arrayReplacingFunc(Array, MATRIX_SIZE, MATRIX_SIZE);
     showArray(Array, MATRIX_SIZE, MATRIX_SIZE);
+    for (int i = 0; i < MATRIX_SIZE; i++)
+    {
+        delete[] Array[i];
+    }
+    delete[] Array;
     return 0;
 }
 
