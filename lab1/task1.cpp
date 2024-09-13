@@ -1,10 +1,9 @@
+
 #include <cstdlib>
 #include <iostream>
 
-// обьявление функций
-
 /**
- * @brief функция возвращает ср. арф. между максимальным и минимальным елементом массива
+ * @brief функция возвращает ср. арф. между максимальным и минимальным элементом массива
  *
  * @param fArray получаемый массив
  * @param sizeAr размер массива
@@ -19,7 +18,7 @@ float getMidleAndMaxMin(int *fArray, int sizeAr, int &min, int &max);
  *
  * @param fArray исходный массив
  * @param sizeAr размер массива
- * @return возвращает заполненый массив
+ * @return возвращает заполненный массив
  */
 int *writeArray(int *fArray, int sizeAr);
 
@@ -34,12 +33,12 @@ void showArray(int *fArray, int sizeAr);
 // точка входа в программу
 int main()
 {
-    int size = 1, min = 0, max = 0; // обьявление переменных
+    int size = 1, min = 0, max = 0; // объявление переменных
     float midle = 0;
     std::cout << "Enter the size of array: ";
     std::cin >> size;                // получение размера массива
     int *Array = new int[size];      // создание динамического массива
-    Array = writeArray(Array, size); // заполнение массивва
+    Array = writeArray(Array, size); // заполнение массива
     midle = getMidleAndMaxMin(Array, size, min, max); // получение ср. арф. между макс. и мин. значениями
     std::cout << "\nArray:" << std::endl;
     showArray(Array, size); // вывод маасива
@@ -72,16 +71,16 @@ int *writeArray(int *fArray, int sizeAr)
     for (int i = 0; i < sizeAr; i++) // цикл заполняющий массив
     {
         std::cout << "Ellement [" << i << "] = ";
-        std::cin >> fArray[i]; // ввод елемента массива
+        std::cin >> fArray[i]; // ввод элемента массива
     }
     return fArray; // возврат массива
 }
 
 void showArray(int *fArray, int sizeAr)
 {
-    for (int i = 0; i < sizeAr; i++) // цикл выводит кадый элемент массива
+    for (int i = 0; i < sizeAr; i++) // цикл выводит каждый элемент массива
     {
-        std::cout << fArray[i] << '\t';
+        std::cout << fArray[i] << '\t'; // вывод элемента
     }
     std::cout << std::endl;
 }
