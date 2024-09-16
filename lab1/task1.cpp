@@ -41,9 +41,9 @@ int main()
     Array = writeArray(Array, size); // заполнение массива
     midle = getMidleAndMaxMin(Array, size, min, max); // получение ср. арф. между макс. и мин. значениями
     std::cout << "\nArray:" << std::endl;
-    showArray(Array, size); // вывод маасива
+    showArray(Array, size); // вывод массива
     std::cout << std::endl;
-    std::cout << "Max: " << max << '\n' << "Min: " << min << std::endl; // вывод максимального и минимального елемента
+    std::cout << "Max: " << max << '\n' << "Min: " << min << std::endl; // вывод максимального и минимального элемента
     std::cout << "\nMidle of Max and Min element:" << midle << std::endl; // вывод ср. арф.
     return 0;
 }
