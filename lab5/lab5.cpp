@@ -48,28 +48,65 @@ class TREE
 
 int main()
 {
-    TREE myTree;        // Создание объекта дерева
-    myTree.BuildTree(); // Построение дерева из данных пользователя
+    TREE myTree;    // Создание объекта дерева
+    int choice = 0; // Переменная для хранения выбора пользователя
 
-    std::cout << "\nPrinting the tree: " << std::endl;
-    myTree.PrintTree(myTree.GetTree()); // Вывод структуры дерева
+    do
+    {
+        // Отображение меню на экране для выбора действий
+        std::cout << "\n=== Tree menu ===\n";
+        std::cout << "1. Build a tree\n";         // Опция построения дерева
+        std::cout << "2. Print the tree\n";       // Опция вывода дерева
+        std::cout << "3. Pre-order traversal\n";  // Опция прямого обхода дерева
+        std::cout << "4. In-order traversal\n";   // Опция симметричного обхода дерева
+        std::cout << "5. Post-order traversal\n"; // Опция обратного обхода дерева
+        std::cout << "6. Print the height of the tree\n"; // Опция вывода высоты дерева
+        std::cout << "7. Clear the tree\n";               // Опция очистки дерева
+        std::cout << "8. Exit\n";                         // Опция выхода из программы
+        std::cout << "Choose an action: "; // Приглашение к вводу выбора действия
+        std::cin >> choice;                // Ввод пользователем выбора
 
-    std::cout << "\nPre order: ";
-    myTree.PreOrder(myTree.GetTree()); // Прямой обход дерева
+        switch (choice) // Обработка введённого пользователем выбора
+        {
+        case 1:
+            myTree.BuildTree();           // Построение дерева
+            std::cout << "Tree built.\n"; // Сообщение о завершении построения
+            break;
+        case 2:
+            std::cout << "Tree output:\n";      // Вывод дерева на экран
+            myTree.PrintTree(myTree.GetTree()); // Вызов функции для печати дерева
+            break;
+        case 3:
+            std::cout << "Pre-order traversal: "; // Сообщение о начале прямого обхода
+            myTree.PreOrder(myTree.GetTree());    // Вызов функции прямого обхода
+            std::cout << "\n";                    // Переход на новую строку после вывода
+            break;
+        case 4:
+            std::cout << "In-order traversal: "; // Сообщение о начале симметричного обхода
+            myTree.InOrder(myTree.GetTree()); // Вызов функции симметричного обхода
+            std::cout << "\n";                // Переход на новую строку после вывода
+            break;
+        case 5:
+            std::cout << "Post-order traversal: "; // Сообщение о начале обратного обхода
+            myTree.PostOrder(myTree.GetTree());    // Вызов функции обратного обхода
+            std::cout << "\n"; // Переход на новую строку после вывода
+            break;
+        case 6:
+            std::cout << "Tree height: " << myTree.Height(myTree.GetTree()) << "\n"; // Вывод высоты дерева
+            break;
+        case 7:
+            myTree.CleanTree(myTree.GetTree()); // Очистка дерева
+            std::cout << "Tree cleaned.\n";     // Сообщение об успешной очистке дерева
+            break;
+        case 8:
+            std::cout << "Exiting program.\n"; // Сообщение о завершении работы программы
+            break;
+        default:
+            std::cout << "Invalid choice, try again.\n"; // Сообщение о неверном выборе действия
+        }
+    } while (choice != 8); // Цикл продолжается до тех пор, пока пользователь не выберет выход
 
-    std::cout << "\nIn order: ";
-    myTree.InOrder(myTree.GetTree()); // Симметричный обход дерева
-
-    std::cout << "\nPost order: ";
-    myTree.PostOrder(myTree.GetTree()); // Обратный обход дерева
-
-    // Вывод высоты дерева
-    std::cout << "\nHeight of tree: " << myTree.Height(myTree.GetTree()) << std::endl;
-
-    myTree.CleanTree(myTree.GetTree()); // Очистка дерева от всех узлов
-    std::cout << "The tree is cleaned up" << std::endl;
-
-    return 0;
+    return 0; // Завершение работы программы
 }
 
 // Функция для построения дерева на основе пользовательского ввода
