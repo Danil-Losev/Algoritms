@@ -26,7 +26,6 @@ Node *InsertionSortList(Node *fHead);
 Node *DeleteList(Node *&fHead);
 void PrintList(Node *fHead);
 
-Node *addNodeToSorted(Node *fSortedList, Node *fNewNode);
 int *ArraySort(int *(*sort)(int *&, int), int *&fArray, int fSize, long long &fTime);
 void FillArrayBestCase(int *&fArray, int fSize);
 void FillArrayMiddleCase(int *&fArray, int fSize);
@@ -244,34 +243,32 @@ Node *SelectionSortList(Node *fHead)
     return fHead;
 }
 
-Node *addNodeToSorted(Node *fSortedList, Node *fNewNode)
-{
-    if (fSortedList == NULL || (*fNewNode).value < (*fSortedList).value)
-    {
-        (*fNewNode).next = fSortedList;
-        return fNewNode;
-    }
-    Node *curNode = fSortedList;
-    while ((*curNode).next != NULL && (*(*curNode).next).value < (*fNewNode).value)
-    {
-        curNode = (*curNode).next;
-    }
-    (*fNewNode).next = (*curNode).next;
-    (*curNode).next = fNewNode;
-    return fSortedList;
-}
-
 Node *InsertionSortList(Node *fHead)
 {
-    Node *sortedList = NULL;
-    Node *curNode = (*fHead).next;
+    Node *sortedList = (*fHead).next;
+    Node *curNode = (*sortedList).next;
+    (*sortedList).next = NULL;
     while (curNode != NULL)
     {
         Node *nextNode = (*curNode).next;
-        sortedList = addNodeToSorted(sortedList, curNode);
+        if ((*curNode).value < (*sortedList).value)
+        {
+            (*curNode).next = sortedList;
+            sortedList = curNode;
+        }
+        else
+        {
+            Node *searchNode = sortedList;
+            while ((*searchNode).next != NULL && (*(*searchNode).next).value < (*curNode).value)
+            {
+                searchNode = (*searchNode).next;
+            }
+            (*curNode).next = (*searchNode).next;
+            (*searchNode).next = curNode;
+        }
         curNode = nextNode;
     }
-    return sortedList;
+    return fHead;
 }
 
 Node *DeleteList(Node *&fHead)
