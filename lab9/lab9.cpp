@@ -248,7 +248,35 @@ int *PyramidSort(int *&fArray, int fSize)
 }
 int *ShakerSort(int *&fArray, int fSize)
 {
-    return nullptr;
+    int LeftSide = 1, RightSide = fSize - 1, temp;
+    bool sorted = true;
+    do
+    {
+        sorted = true;
+        for (int i = LeftSide; i <= RightSide; i++)
+        {
+            if (fArray[i - 1] > fArray[i])
+            {
+                temp = fArray[i - 1];
+                fArray[i - 1] = fArray[i];
+                fArray[i] = temp;
+                sorted = false;
+            }
+        }
+        RightSide--;
+        for (int i = RightSide; i >= LeftSide; i--)
+        {
+            if (fArray[i] < fArray[i - 1])
+            {
+                temp = fArray[i];
+                fArray[i] = fArray[i - 1];
+                fArray[i - 1] = temp;
+                sorted = false;
+            }
+        }
+        LeftSide++;
+    } while (sorted == false);
+    return fArray;
 }
 
 void PrintArray(int *fArray, int fSize)
