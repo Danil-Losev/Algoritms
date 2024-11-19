@@ -25,7 +25,9 @@ int *InsertionSort(int *&fArray, int fSize, int fStart, int fEnd);
 int *PartShellSort(int *&fArray, int fSize, int fStart, int fEnd, int interval);
 int *ShellSort(int *&fArray, int fSize);
 
+int *ArrayToHeap(int *&fArray, int fSize, int fIndex);
 int *PyramidSort(int *&fArray, int fSize);
+
 int *ShakerSort(int *&fArray, int fSize);
 
 void PrintArray(int *fArray, int fSize);
@@ -242,10 +244,48 @@ int *ShellSort(int *&fArray, int fSize)
     fArray = PartShellSort(fArray, fSize, 0, fSize, fSize);
     return fArray;
 }
+
+int *ArrayToHeap(int *&fArray, int fSize, int fIndex)
+{
+    int temp;
+    int fTreeRoot = fIndex;
+    int fLeftTree = 2 * fIndex + 1;
+    int fRightTree = 2 * fIndex + 2;
+    if (fLeftTree < fSize && fArray[fLeftTree] > fArray[fTreeRoot])
+    {
+        fTreeRoot = fLeftTree;
+    }
+    if (fRightTree < fSize && fArray[fRightTree] > fArray[fTreeRoot])
+    {
+        fTreeRoot = fRightTree;
+    }
+    if (fTreeRoot != fIndex)
+    {
+        temp = fArray[fIndex];
+        fArray[fIndex] = fArray[fTreeRoot];
+        fArray[fTreeRoot] = temp;
+        fArray = ArrayToHeap(fArray, fSize, fTreeRoot);
+    }
+    return fArray;
+}
+
 int *PyramidSort(int *&fArray, int fSize)
 {
-    return nullptr;
+    for (int i = fSize / 2 - 1; i >= 0; i--)
+    {
+        ArrayToHeap(fArray, fSize, i);
+    }
+    int temp;
+    for (int i = fSize - 1; i >= 0; i--)
+    {
+        temp = fArray[0];
+        fArray[0] = fArray[i];
+        fArray[i] = temp;
+        ArrayToHeap(fArray, i, 0);
+    }
+    return fArray;
 }
+
 int *ShakerSort(int *&fArray, int fSize)
 {
     int LeftSide = 1, RightSide = fSize - 1, temp;
