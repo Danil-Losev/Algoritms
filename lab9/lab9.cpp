@@ -12,28 +12,53 @@
 int PRINT_MAX_SIZE = 1000;
 int TEST_STEP_SIZE = 50;
 
+// Функция сортировки массива с использованием переданного алгоритма
+// sort - указатель на функцию сортировки
+// fArray - массив, который нужно отсортировать
+// fSize - размер массива
+// fTime - переменная для хранения времени выполнения сортировки
 int *ArraySort(int *(*sort)(int *&, int), int *&fArray, int fSize, long long &fTime);
 
+// Функция для заполнения массива для лучшего случая (массив уже отсортирован)
 void FillArrayBestCase(int *&fArray, int fSize);
+
+// Функция для заполнения массива для среднего случая (случайно перемешанный массив)
 void FillArrayMiddleCase(int *&fArray, int fSize);
+
+// Функция для заполнения массива для худшего случая (массив отсортирован в обратном порядке)
 void FillArrayBadCase(int *&fArray, int fSize);
 
+// Частичная реализация быстрой сортировки (рекурсивная сортировка подмассивов)
 int *PartQuickSort(int *&fArray, int fSize, int fStart, int fEnd);
+
+// Основная функция быстрой сортировки
 int *QuickSort(int *&fArray, int fSize);
 
+// Вставочная сортировка на подмассиве массива
 int *InsertionSort(int *&fArray, int fSize, int fStart, int fEnd);
+
+// Частичная реализация сортировки Шелла (рекурсивное разделение массива на интервалы)
 int *PartShellSort(int *&fArray, int fSize, int fStart, int fEnd, int interval);
+
+// Основная функция сортировки Шелла
 int *ShellSort(int *&fArray, int fSize);
 
+// Преобразование массива в кучу (используется в пирамидальной сортировке)
 int *ArrayToHeap(int *&fArray, int fSize, int fIndex);
+
+// Пирамидальная сортировка массива
 int *PyramidSort(int *&fArray, int fSize);
 
+// Шейкерная сортировка массива
 int *ShakerSort(int *&fArray, int fSize);
 
+// Функция для вывода массива на экран
 void PrintArray(int *fArray, int fSize);
 
+// Автоматический тест сортировки массива с увеличивающимся размером
 void arrayAutoTest(int fMaxSize);
 
+// Автоматический тест для сортировки массива с заданным размером и алгоритмом заполнения
 long long autoSortTestForArray(int *(*sort)(int *&, int), void (*fill)(int *&, int), int fSize);
 
 int main()
@@ -227,96 +252,127 @@ int *InsertionSort(int *&fArray, int fSize, int fStart, int fEnd)
 
 int *PartShellSort(int *&fArray, int fSize, int fStart, int fEnd, int interval)
 {
-    interval = interval / 2;
+    interval = interval / 2; // Уменьшаем интервал на половину
     if (interval <= 0)
     {
-        return fArray;
+        return fArray; // Завершаем, если интервал стал меньше или равен нулю
     }
+
+    // Сортировка подмассивов с текущим интервалом
     fArray = InsertionSort(fArray, fSize, fStart, interval);
     fArray = InsertionSort(fArray, fSize, interval, fEnd);
+
+    // Рекурсивные вызовы с меньшим интервалом для сортировки
     fArray = PartShellSort(fArray, fSize, fStart, interval, interval);
     fArray = PartShellSort(fArray, fSize, interval, fEnd, interval);
-    return fArray;
+
+    return fArray; // Возвращаем отсортированный массив
 }
 
 int *ShellSort(int *&fArray, int fSize)
 {
+    // Вызов функции PartShellSort с начальной группой элементов
+    // Параметры: исходный массив, размер массива, начальный индекс (0), конечный индекс (fSize), и изначальный шаг,
+    // равный размеру массива
     fArray = PartShellSort(fArray, fSize, 0, fSize, fSize);
-    return fArray;
+    return fArray; // Возвращаем отсортированный массив
 }
 
 int *ArrayToHeap(int *&fArray, int fSize, int fIndex)
 {
-    int temp;
-    int fTreeRoot = fIndex;
-    int fLeftTree = 2 * fIndex + 1;
-    int fRightTree = 2 * fIndex + 2;
+    int temp;                        // Временная переменная для обмена элементов
+    int fTreeRoot = fIndex;          // Инициализация текущего корня поддерева
+    int fLeftTree = 2 * fIndex + 1;  // Левый потомок узла
+    int fRightTree = 2 * fIndex + 2; // Правый потомок узла
+
+    // Проверка: является ли левый потомок больше текущего корня поддерева
     if (fLeftTree < fSize && fArray[fLeftTree] > fArray[fTreeRoot])
     {
-        fTreeRoot = fLeftTree;
+        fTreeRoot = fLeftTree; // Устанавливаем левый потомок в качестве нового корня поддерева
     }
+
+    // Проверка: является ли правый потомок больше текущего корня поддерева
     if (fRightTree < fSize && fArray[fRightTree] > fArray[fTreeRoot])
     {
-        fTreeRoot = fRightTree;
+        fTreeRoot = fRightTree; // Устанавливаем правый потомок в качестве нового корня поддерева
     }
+
+    // Если корень изменился, выполняется обмен и рекурсивный вызов для перестройки поддерева
     if (fTreeRoot != fIndex)
     {
-        temp = fArray[fIndex];
-        fArray[fIndex] = fArray[fTreeRoot];
-        fArray[fTreeRoot] = temp;
+        temp = fArray[fIndex];              // Сохраняем значение текущего узла
+        fArray[fIndex] = fArray[fTreeRoot]; // Перемещаем больший потомок в текущий корень
+        fArray[fTreeRoot] = temp; // Возвращаем сохраненное значение в потомок
+
+        // Рекурсивно перестраиваем измененное поддерево для поддержки свойств кучи
         fArray = ArrayToHeap(fArray, fSize, fTreeRoot);
     }
-    return fArray;
+
+    return fArray; // Возвращаем массив после преобразования
 }
 
 int *PyramidSort(int *&fArray, int fSize)
 {
+    // Построение начальной кучи: формируем кучу из массива, начиная с первых непустых поддеревьев
     for (int i = fSize / 2 - 1; i >= 0; i--)
     {
-        ArrayToHeap(fArray, fSize, i);
+        ArrayToHeap(fArray, fSize, i); // Преобразование текущего поддерева в кучу
     }
-    int temp;
+
+    int temp; // Временная переменная для обмена корневого элемента
+
+    // Основной цикл сортировки: уменьшаем размер кучи и перемещаем наибольший элемент в конец
     for (int i = fSize - 1; i >= 0; i--)
     {
-        temp = fArray[0];
-        fArray[0] = fArray[i];
-        fArray[i] = temp;
+        temp = fArray[0]; // Сохраняем корневой элемент (максимум в текущей куче)
+        fArray[0] = fArray[i]; // Перемещаем последний элемент в корень
+        fArray[i] = temp; // Сохраняем максимальный элемент в правильной позиции
+
+        // Преобразуем оставшуюся часть массива в кучу после удаления текущего корня
         ArrayToHeap(fArray, i, 0);
     }
-    return fArray;
+
+    return fArray; // Возвращаем отсортированный массив
 }
 
 int *ShakerSort(int *&fArray, int fSize)
 {
-    int LeftSide = 1, RightSide = fSize - 1, temp;
-    bool sorted = true;
+    int LeftSide = 1, RightSide = fSize - 1, temp; // Инициализация границ сортировки и временной переменной для обмена
+    bool sorted = true; // Флаг для отслеживания отсортированности массива
+
     do
     {
-        sorted = true;
+        sorted = true; // Предполагается, что массив отсортирован, пока не будет найдено несоответствие
+
+        // Проход слева направо
         for (int i = LeftSide; i <= RightSide; i++)
         {
-            if (fArray[i - 1] > fArray[i])
+            if (fArray[i - 1] > fArray[i]) // Если текущий элемент больше следующего, требуется обмен
             {
-                temp = fArray[i - 1];
-                fArray[i - 1] = fArray[i];
-                fArray[i] = temp;
-                sorted = false;
+                temp = fArray[i - 1]; // Сохраняем значение текущего элемента
+                fArray[i - 1] = fArray[i]; // Перемещаем следующий элемент в текущее место
+                fArray[i] = temp; // Восстанавливаем сохраненное значение в следующем элементе
+                sorted = false; // Если обмен произведён, массив ещё не отсортирован
             }
         }
-        RightSide--;
+        RightSide--; // Сокращаем правую границу, так как крайний правый элемент отсортирован
+
+        // Проход справа налево
         for (int i = RightSide; i >= LeftSide; i--)
         {
-            if (fArray[i] < fArray[i - 1])
+            if (fArray[i] < fArray[i - 1]) // Если текущий элемент меньше предыдущего, выполняется обмен
             {
-                temp = fArray[i];
-                fArray[i] = fArray[i - 1];
-                fArray[i - 1] = temp;
-                sorted = false;
+                temp = fArray[i]; // Сохраняем значение текущего элемента
+                fArray[i] = fArray[i - 1]; // Перемещаем предыдущий элемент на текущую позицию
+                fArray[i - 1] = temp; // Восстанавливаем сохраненное значение на предыдущей позиции
+                sorted = false; // Обмен показывает, что массив ещё не отсортирован
             }
         }
-        LeftSide++;
-    } while (sorted == false);
-    return fArray;
+        LeftSide++; // Увеличиваем левую границу, так как крайний левый элемент отсортирован
+
+    } while (sorted == false); // Повторяем, пока не будет прохода без обменов
+
+    return fArray; // Возвращаем отсортированный массив
 }
 
 void PrintArray(int *fArray, int fSize)
