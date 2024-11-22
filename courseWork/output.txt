@@ -1,0 +1,8 @@
+Inserction: 1:   234    [324]    654    12    43
+Inserction: 2:   234    324    [654]    12    43
+Inserction: 3:   [12] <- 234 <- 324 <- 654    43
+Inserction: 4:   12    [43] <- 234 <- 324 <- 654
+
+
+Array is sorted
+
