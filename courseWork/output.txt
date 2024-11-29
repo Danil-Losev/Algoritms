@@ -5,3 +5,27 @@ Array is sorted
 
 Array is sorted
 
+
+Array is sorted
+
+Insertion step: 1:   123    [456]    13    75675    213
+Insertion step: 2:   [13] <- 123 <- 456    75675    213
+Insertion step: 3:   13    123    456    [75675]    213
+Insertion step: 4:   13    123    [213] <- 456 <- 75675
+
+Insertion step: 1:   [3] <- 12    213    12    3
+Insertion step: 2:   3    12    [213]    12    3
+Insertion step: 3:   3    12    [12] <- 213    3
+Insertion step: 4:   3    [3] <- 12 <- 12 <- 213
+
+
+Array is sorted
+
+
+Array is sorted
+
+Insertion step: 1:   312    [5643]    234    67    2
+Insertion step: 2:   [234] <- 312 <- 5643    67    2
+Insertion step: 3:   [67] <- 234 <- 312 <- 5643    2
+Insertion step: 4:   [2] <- 67 <- 234 <- 312 <- 5643
+

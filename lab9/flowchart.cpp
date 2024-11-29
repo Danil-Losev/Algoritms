@@ -1,436 +1,303 @@
-﻿#include <chrono>     
-#include <conio.h>    
-#include <cstddef>    
-#include <cstdio>     
-#include <cstdlib>    
-#include <ctime>      
-#include <iomanip>    
-#include <iostream>   
+﻿#include <cstdlib> 
+#include <fstream> 
+#include <iostream> 
+#include <limits> 
+#include <regex> 
+#include <sstream> 
+#include <string>  
 #include <synchapi.h> 
-#include <windows.h>  
-
-int PRINT_MAX_SIZE = 1000;
-int TEST_STEP_SIZE = 50;
+#include <windows.h> 
 
 
-int *ArraySort(int *(*sort)(int *&, int), int *&fArray, int fSize, long long &fTime);
+const int MAX_NUMBER = 1000000000; 
+const int MAX_ARRAY_SIZE = 100; 
+const int MIN_ARRAY_SIZE = 1;   
+const string FILE_NAME = "output.txt"; 
 
 
-void FillArrayBestCase(int *&fArray, int fSize);
+class DYNAMIC_ARRAY
+{
+  private:
+    bool isError = false; 
+    bool isSorted = true; 
+    int *cArray;          
+    int cSize;            
 
+  public:
+    DYNAMIC_ARRAY(int fSize); 
+    ~DYNAMIC_ARRAY();         
+    void deleteArray();       
+    int get(int fIndex);      
+    void set(int fIndex, int fElement); 
+    bool getError();                    
+    void isSort(); 
+    void fillTheArray(const string fInput); 
+    void insertionSortArray(); 
+    void printArray(char fOpen = ' ', char fClose = ' '); 
+    void printArrayInSort(int fIndexOfInsertElement, int fStart); 
+    void printArrayInSortToFile(int fIndexOfInsertElement, int fStart,
+                                string fFileName = FILE_NAME); 
+};
 
-void FillArrayMiddleCase(int *&fArray, int fSize);
-
-
-void FillArrayBadCase(int *&fArray, int fSize);
-
-
-int *PartQuickSort(int *&fArray, int fSize, int fStart, int fEnd);
-
-
-int *QuickSort(int *&fArray, int fSize);
-
-
-int *InsertionSort(int *&fArray, int fSize, int fStart, int fEnd);
-
-
-int *PartShellSort(int *&fArray, int fSize, int fStart, int fEnd, int interval);
-
-
-int *ShellSort(int *&fArray, int fSize);
-
-
-int *ArrayToHeap(int *&fArray, int fSize, int fIndex);
-
-
-int *PyramidSort(int *&fArray, int fSize);
-
-
-int *ShakerSort(int *&fArray, int fSize);
-
-
-void PrintArray(int *fArray, int fSize);
-
-
-void arrayAutoTest(int fMaxSize);
-
-
-long long autoSortTestForArray(int *(*sort)(int *&, int), void (*fill)(int *&, int), int fSize);
 
 int main()
 {
-    int programm = 1; 
-    int choose = 1;   
-    int size = 1;     
-    long long sortTime = 0; 
-
-    while (programm != 0) 
+    bool isProgram = true, sizeError = false; 
+    while (isProgram)                        
     {
-        system("cls"); 
-        cout << "Enter the size of array: ";
-        cin >> size; 
-        Sleep(500);       
-        system("cls");
-
-        int *array = new int[size]{}; 
-
-        system("cls");
-        cout << "Enter the type of filling array\n";
-        cout << "  1) Best case\n";   
-        cout << "  2) Middle case\n"; 
-        cout << "  3) Bad case\n";    
-        cout << "\n> ";
-        std::cin >> choose;
-
-        switch (choose) 
+        int arraySize = 0; 
+        do
         {
-        case 1:
-            FillArrayBestCase(array, size);
-            break;
-        case 2:
-            FillArrayMiddleCase(array, size);
-            break;
-        case 3:
-            FillArrayBadCase(array, size);
-            break;
-        }
-
-        if (size <= PRINT_MAX_SIZE) 
-        {
-            cout << "Array: ";
-            PrintArray(array, size); 
-        }
-
-        getch(); 
-        system("cls");
-
-        cout << "Enter the sort for array:\n";
-        cout << "  1) Quick Sort\n";
-        cout << "  2) Shell Sort\n";
-        cout << "  3) Pyramid Sort\n";
-        cout << "  4) Shaker Sort\n> ";
-        cin >> choose;
-
-        switch (choose)
-        {
-        case 1:
-            array = ArraySort(QuickSort, array, size, sortTime);
-            break;
-        case 2:
-            array = ArraySort(ShellSort, array, size, sortTime);
-            break;
-        case 3:
-            array = ArraySort(PyramidSort, array, size, sortTime);
-            break;
-        case 4:
-            array = ArraySort(ShakerSort, array, size, sortTime);
-            break;
-        }
-
-        if (size <= PRINT_MAX_SIZE)
-        {
-            cout << "Sorted array: ";
-            PrintArray(array, size);
-        }
-        cout << "Sort time: " << sortTime << std::endl;
-
-        getch();
-        system("cls");
-
-        delete[] array; 
-        array = NULL;
-
-        int choose1 = 0;
-        cout << "Do you want to do auto test? (1=yes 0=no) : ";
-        cin >> choose1;
-
-        if (choose1 == 1)
-        {
-            system("cls");
-            int sizeOfTest;
-            cout << "Enter the size of test: ";
-            cin >> sizeOfTest;
-            arrayAutoTest(sizeOfTest); 
-            getch();
-        }
-
-        system("cls");
-        cout << "Go to start? (1=yes 0=no)\n> ";
-        cin >> programm; 
-    }
-    return 0;
-}
-
-int *ArraySort(int *(*sort)(int *&, int), int *&fArray, int fSize, long long &fTime)
-{
-    auto start = chrono::high_resolution_clock::now(); 
-    int *Temp = sort(fArray, fSize);                        
-    auto end = chrono::high_resolution_clock::now();  
-    fTime = chrono::duration_cast<std::chrono::microseconds>(end - start).count(); 
-    return Temp; 
-}
-
-void FillArrayBestCase(int *&fArray, int fSize)
-{
-    for (int i = 0; i < fSize; i++) 
-    {
-        fArray[i] = i + 1;
-    }
-}
-
-void FillArrayMiddleCase(int *&fArray, int fSize)
-{
-    for (int i = 0; i < fSize; i++) 
-    {
-        fArray[i] = (rand() % fSize) + 1; 
-    }
-}
-
-void FillArrayBadCase(int *&fArray, int fSize)
-{
-    for (int i = 0; i < fSize; i++) 
-    {
-        fArray[i] = fSize - i; 
-    }
-}
-
-int *PartQuickSort(int *&fArray, int fSize, int fStart, int fEnd)
-{
-
-    if (fStart >= fEnd)
-    {
-        return fArray; 
-    }
-
-    int fSupportingElement = fArray[fEnd]; 
-    int fIndexOfSupportingElement = fStart;
-
- 
-    for (int i = fStart; i < fEnd; i++)
-    {
-        if (fArray[i] <= fSupportingElement)
-        {
-            swap(fArray[i], fArray[fIndexOfSupportingElement]);
-            fIndexOfSupportingElement++;
-        }
-    }
-    swap(fArray[fIndexOfSupportingElement], fArray[fEnd]); 
+            system("cls"); 
+            sizeError = false;  
+            cout << "Enter the size of array ( 1 <= size <= 100 ): "; 
+            cin >> arraySize;                                         
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
 
 
-    PartQuickSort(fArray, fSize, fStart, fIndexOfSupportingElement - 1);
-    PartQuickSort(fArray, fSize, fIndexOfSupportingElement + 1, fEnd);
-
-    return fArray;
-}
-
-int *QuickSort(int *&fArray, int fSize)
-{
-    fArray = PartQuickSort(fArray, fSize, 0, fSize - 1);
-    return fArray;
-}
-
-int *InsertionSort(int *&fArray, int fSize, int fStart, int fEnd)
-{
-    for (int i = fStart; i < fEnd; i++) 
-    {
-        int curInt = fArray[i]; 
-        int j;                  
-
-        for (j = i - 1; j >= 0 && fArray[j] > curInt; j--)
-        {
-            fArray[j + 1] = fArray[j];
-        }
-        fArray[j + 1] = curInt; 
-    }
-    return fArray; 
-}
-
-int *PartShellSort(int *&fArray, int fSize, int fStart, int fEnd, int interval)
-{
-    interval = interval / 2; 
-    if (interval <= 0)
-    {
-        return fArray; 
-    }
-
-
-    fArray = InsertionSort(fArray, fSize, fStart, interval);
-    fArray = InsertionSort(fArray, fSize, interval, fEnd);
-
-
-    fArray = PartShellSort(fArray, fSize, fStart, interval, interval);
-    fArray = PartShellSort(fArray, fSize, interval, fEnd, interval);
-
-    return fArray;
-}
-
-int *ShellSort(int *&fArray, int fSize)
-{
-
-    fArray = PartShellSort(fArray, fSize, 0, fSize, fSize);
-    return fArray; 
-}
-
-int *ArrayToHeap(int *&fArray, int fSize, int fIndex)
-{
-    int temp;                        
-    int fTreeRoot = fIndex;          
-    int fLeftTree = 2 * fIndex + 1;  
-    int fRightTree = 2 * fIndex + 2;
-
-
-    if (fLeftTree < fSize && fArray[fLeftTree] > fArray[fTreeRoot])
-    {
-        fTreeRoot = fLeftTree; 
-    }
-
-
-    if (fRightTree < fSize && fArray[fRightTree] > fArray[fTreeRoot])
-    {
-        fTreeRoot = fRightTree; 
-    }
-
-
-    if (fTreeRoot != fIndex)
-    {
-        temp = fArray[fIndex];              
-        fArray[fIndex] = fArray[fTreeRoot]; 
-        fArray[fTreeRoot] = temp; 
-
-
-        fArray = ArrayToHeap(fArray, fSize, fTreeRoot);
-    }
-
-    return fArray; 
-}
-
-int *PyramidSort(int *&fArray, int fSize)
-{
-
-    for (int i = fSize / 2 - 1; i >= 0; i--)
-    {
-        ArrayToHeap(fArray, fSize, i); 
-    }
-
-    int temp; 
-
-
-    for (int i = fSize - 1; i >= 0; i--)
-    {
-        temp = fArray[0];
-        fArray[0] = fArray[i]; 
-        fArray[i] = temp; 
-
-
-        ArrayToHeap(fArray, i, 0);
-    }
-
-    return fArray; 
-}
-
-int *ShakerSort(int *&fArray, int fSize)
-{
-    int LeftSide = 1, RightSide = fSize - 1, temp; 
-    bool sorted = true; 
-
-    do
-    {
-        sorted = true; 
-
-
-        for (int i = LeftSide; i <= RightSide; i++)
-        {
-            if (fArray[i - 1] > fArray[i]) 
+            if (arraySize > MAX_ARRAY_SIZE || arraySize < MIN_ARRAY_SIZE || cin.fail())
             {
-                temp = fArray[i - 1]; 
-                fArray[i - 1] = fArray[i]; 
-                fArray[i] = temp;
-                sorted = false; 
+                cin.clear(); 
+                cin.ignore(); 
+                cout << "  ERROR: You entered the wrong size!!! \n  Please try again\n"; 
+                Sleep(2000);    
+                sizeError = true; 
+            }
+        } while (sizeError);
+
+        DYNAMIC_ARRAY array(arraySize); 
+
+        string input; 
+        regex pattern("^\\d+(\\s+\\d+)*$");
+        bool isSymbol = false; 
+
+        do
+        {
+            system("cls"); 
+            cout << "The size of array: " << arraySize << endl
+                      << "Enter the array ( natural numbers not exceeding 10^9 ): "; 
+            getline(cin, input);       
+            array.fillTheArray(input);
+            isSymbol = regex_match(input, pattern); 
+
+            if (array.getError() || !isSymbol)
+            {
+                cout << "  ERROR: Invalid input (e.g., number exceeds the limit or wrong format)!!!\n"; 
+                Sleep(2000);
+            }
+        } while (array.getError() || !isSymbol); 
+
+        array.insertionSortArray();
+        cout << endl;
+        cout << "Sorted array: ";
+        array.printArray('[', ']'); 
+        Sleep(2000);                
+        array.deleteArray();      
+        cout << "\nTry again? ( 1=yes , 0=no ): "; 
+        cin >> isProgram;          
+    }
+    return 0; 
+}
+
+
+DYNAMIC_ARRAY::DYNAMIC_ARRAY(int fSize) : cSize(fSize)
+{
+    cArray = new int[cSize]{};
+};
+
+
+DYNAMIC_ARRAY::~DYNAMIC_ARRAY()
+{
+    delete[] cArray;  
+    cArray = nullptr; 
+}
+
+
+void DYNAMIC_ARRAY::deleteArray()
+{
+    delete[] cArray;
+    cArray = nullptr; 
+}
+
+
+int DYNAMIC_ARRAY::get(int fIndex)
+{
+    isError = false;                  
+    if (fIndex >= 0 && fIndex < cSize) 
+    {
+        return cArray[fIndex]; 
+    }
+    else
+    {
+        cout << "\n  ERROR: You entered the wrong size!!! \n  "; 
+        isError = true;                                             
+        return 0;                                                   
+    }
+}
+
+
+void DYNAMIC_ARRAY::set(int fIndex, int fElement)
+{
+    isError = false;                  
+    if (fIndex >= 0 && fIndex < cSize) 
+    {
+        cArray[fIndex] = fElement; 
+    }
+    else
+    {
+        cout << "\n  ERROR: You entered the wrong size!!! \n  Please try again\n"; 
+        isError = true; 
+    }
+}
+
+
+bool DYNAMIC_ARRAY::getError()
+{
+    return isError; 
+}
+
+
+void DYNAMIC_ARRAY::isSort()
+{
+    for (int i = 0; i < cSize - 1; i++) 
+    {
+        if (cArray[i] > cArray[i + 1]) 
+        {
+            isSorted = false; 
+        }
+    }
+}
+
+void DYNAMIC_ARRAY::fillTheArray(const string fInput)
+{
+    isError = false;           
+    if (!cArray || cSize <= 0) 
+    {
+        isError = true; 
+    }
+    else
+    {
+        istringstream numberStream(fInput); 
+        int number;   
+        int index = 0;
+
+        while (numberStream >> number)
+        {
+            if (number > MAX_NUMBER || index >= cSize || number <= 0)
+            {
+                isError = true; 
+                break;         
+            }
+            cArray[index] = number; 
+            ++index;               
+        }
+
+        if (!isError)
+        {
+            for (int i = index; i < cSize; i++)
+            {
+                cArray[i] = 0; 
             }
         }
-        RightSide--; 
+    }
+}
 
+void DYNAMIC_ARRAY::insertionSortArray()
+{
+    isSort();              
+    if (isSorted == false) 
+    {
+        cout << "\nYour array: ";
+        printArray('[', ']'); 
+        cout << "\nSorting...\n";
 
-        for (int i = RightSide; i >= LeftSide; i--)
+        for (int i = 1; i < cSize; i++) 
         {
-            if (fArray[i] < fArray[i - 1]) 
+            int curInt = cArray[i]; 
+            int j;                 
+
+            
+            for (j = i - 1; j >= 0 && cArray[j] > curInt; j--)
             {
-                temp = fArray[i]; 
-                fArray[i] = fArray[i - 1]; 
-                fArray[i - 1] = temp; 
-                sorted = false; 
+                cArray[j + 1] = cArray[j]; 
+            }
+            cArray[j + 1] = curInt; 
+
+            printArrayInSort(j + 1, i + 1); 
+            printArrayInSortToFile(j + 1, i + 1); 
+        }
+    }
+
+    ofstream fileStream(FILE_NAME, ios::app | ios::ate);
+    if (isSorted == true)
+    {
+        cout << "\nArray is sorted" << endl;  
+        fileStream << "\nArray is sorted" << endl; 
+    }
+    fileStream << endl;
+    fileStream.close(); 
+}
+
+void DYNAMIC_ARRAY::printArray(char fOpen, char fClose)
+{
+    for (int i = 0; i < cSize; i++)
+    {
+        cout << fOpen << get(i) << fClose << ' '; 
+    }
+    cout << endl; 
+}
+
+void DYNAMIC_ARRAY::printArrayInSort(int fIndexOfInsertElement, int fStart)
+{
+    for (int i = 0; i < cSize; i++) 
+    {
+        if (i < fIndexOfInsertElement) 
+        {
+            cout << get(i) << "    ";
+        }
+        else if (i == fIndexOfInsertElement) 
+        {
+            cout << '[' << get(i) << ']';
+        }
+        else if (i > fIndexOfInsertElement && i < fStart) 
+        {
+            cout << " <- " << get(i);
+        }
+        else
+        {
+            cout << "    " << get(i);
+        }
+    }
+    cout << endl; 
+}
+
+void DYNAMIC_ARRAY::printArrayInSortToFile(int fIndexOfInsertElement, int fStart, string fFileName)
+{
+    ofstream fileStream(fFileName, ios::app | ios::ate); 
+    if (fileStream.is_open())
+    {
+        fileStream << "Insertion step: " << fStart - 1 << ":   "; 
+
+        for (int i = 0; i < cSize; i++) 
+        {
+            if (i < fIndexOfInsertElement)
+            {
+                fileStream << get(i) << "    "; 
+            }
+            else if (i == fIndexOfInsertElement) 
+            {
+                fileStream << '[' << get(i) << ']'; 
+            }
+            else if (i > fIndexOfInsertElement && i < fStart) 
+            {
+                fileStream << " <- " << get(i); 
+            }
+            else 
+            {
+                fileStream << "    " << get(i); 
             }
         }
-        LeftSide++; 
-
-    } while (sorted == false);
-
-    return fArray; 
-}
-
-void PrintArray(int *fArray, int fSize)
-{
-    if (fArray == 0) 
-    {
-        return; 
+        fileStream << endl; 
     }
-    for (int i = 0; i < fSize; i++) 
-    {
-        cout << fArray[i] << ' '; 
-    }
-    cout << std::endl; 
-}
-
-void arrayAutoTest(int fMaxSize)
-{
-    cout << "\n Array Time Auto Test\n"; 
-    const int width = 12;                    
-
-    cout << string(width * 15 + 8, '-') << endl; 
-
-    cout << setw(width / 2) << ' ' << " | " << setw(width) << ' ' << "   " << setw(width * 2)
-              << "Best case      " << "      " << setw(width) << ' ' << " | " << setw(width) << ' ' << "   "
-              << setw(width * 2) << "Average case      " << "      " << setw(width) << ' ' << " | "
-              << setw(width) << ' ' << "   " << setw(width * 2) << "Worst case      " << "      "
-              << setw(width) << ' ' << " | " << endl;
-
-    
-    cout << setw(width / 2) << "Count" << " | " << setw(width) << "Quick" << " | " << setw(width)
-              << "Shell" << " | " << setw(width) << "Pyramid" << " | " << setw(width) << "Shaker" << " | "
-              << setw(width) << "Quick" << " | " << setw(width) << "Shell" << " | " << setw(width)
-              << "Pyramid" << " | " << setw(width) << "Shaker" << " | " << setw(width) << "Quick" << " | "
-              << setw(width) << "Shell" << " | " << setw(width) << "Pyramid" << " | " << setw(width)
-              << "Shaker" << " | " << endl;
-
-   
-    cout << string(width * 15 + 8, '-') << endl;
-    for (int i = 100; i <= fMaxSize; i += TEST_STEP_SIZE) 
-    {
-        int size = i; 
-        cout << setw(width / 2) << i << " | " << setw(width)
-                  << autoSortTestForArray(QuickSort, FillArrayBestCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(ShellSort, FillArrayBestCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(PyramidSort, FillArrayBestCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(ShakerSort, FillArrayBestCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(QuickSort, FillArrayMiddleCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(ShellSort, FillArrayMiddleCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(PyramidSort, FillArrayMiddleCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(ShakerSort, FillArrayMiddleCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(QuickSort, FillArrayBadCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(ShellSort, FillArrayBadCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(PyramidSort, FillArrayBadCase, size) << " | " << setw(width)
-                  << autoSortTestForArray(ShakerSort, FillArrayBadCase, size) << " | " << endl;
-    }
-    cout << string(width * 15 + 8, '-') << endl; 
-}
-
-long long autoSortTestForArray(int *(*sort)(int *&, int), void (*fill)(int *&, int), int fSize)
-{
-    int *testArray = new int[fSize]{}; 
-    fill(testArray, fSize);            
-    long long sortTime = 0;            
-    testArray = ArraySort(sort, testArray, fSize, sortTime);
-    delete[] testArray;                                    
-    testArray = NULL;                                  
-    return sortTime;
+    fileStream.close(); 
 }
