@@ -35,8 +35,9 @@ class DYNAMIC_ARRAY
     void insertionSortArray(); // Метод для сортировки массива вставками
     void printArray(char fOpen = ' ', char fClose = ' '); // Метод для вывода массива в консоль
     void printArrayInSort(int fIndexOfInsertElement, int fStart); // Метод для вывода отсортированного массива
-    void printArrayInSortToFile(int fIndexOfInsertElement, int fStart,
-                                std::string fFileName = FILE_NAME); // Метод для записи отсортированного массива в файл
+    void printArrayInSortToFile(
+        int fIndexOfInsertElement, int fStart,
+        const std::string &fFileName = FILE_NAME); // Метод для записи отсортированного массива в файл
 };
 
 // Основная функция программы
@@ -277,7 +278,7 @@ void DYNAMIC_ARRAY::printArrayInSort(int fIndexOfInsertElement, int fStart)
     std::cout << std::endl; // Завершение строки
 }
 
-void DYNAMIC_ARRAY::printArrayInSortToFile(int fIndexOfInsertElement, int fStart, std::string fFileName)
+void DYNAMIC_ARRAY::printArrayInSortToFile(int fIndexOfInsertElement, int fStart, const std::string &fFileName)
 {
     std::ofstream fileStream(fFileName, std::ios::app | std::ios::ate); // Открытие файла в режиме добавления данных
     if (fileStream.is_open()) // Проверка на успешное открытие файла
