@@ -31,7 +31,7 @@ class DYNAMIC_ARRAY
     void set(int fIndex, int fElement); // Метод для установки элемента по индексу
     bool getError();                    // Метод для проверки наличия ошибок
     void isSort(); // Метод для проверки массива на упорядоченность
-    void fillTheArray(const std::string fInput); // Метод для заполнения массива из строки
+    void fillTheArray(const std::string& fInput); // Метод для заполнения массива из строки
     void insertionSortArray(); // Метод для сортировки массива вставками
     void printArray(char fOpen = ' ', char fClose = ' '); // Метод для вывода массива в консоль
     void printArrayInSort(int fIndexOfInsertElement, int fStart); // Метод для вывода отсортированного массива
@@ -172,7 +172,7 @@ void DYNAMIC_ARRAY::isSort()
     }
 }
 
-void DYNAMIC_ARRAY::fillTheArray(const std::string fInput)
+void DYNAMIC_ARRAY::fillTheArray(const std::string& fInput)
 {
     isError = false;           // Инициализируется флаг ошибки
     if (!cArray || cSize <= 0) // Проверяется корректность инициализации массива
