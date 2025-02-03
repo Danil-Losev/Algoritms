@@ -6,8 +6,9 @@
 #include <sstream> 
 #include <string>  
 #include <synchapi.h> 
-#include <windows.h> 
+#include <windows.h>
 
+using namespace std;
 
 const int MAX_NUMBER = 1000000000; 
 const int MAX_ARRAY_SIZE = 100; 
