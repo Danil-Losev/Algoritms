@@ -5,8 +5,8 @@
 #include <regex> // Подключение библиотеки для работы с регулярными выражениями
 #include <sstream> // Подключение библиотеки для работы с потоками строк, преобразование строк в числа
 #include <string>  // Подключение библиотеки для работы со строками
-#include <synchapi.h> // Подключение библиотеки для использования функции Sleep для пауз в выполнении
-#include <windows.h> // Подключение библиотеки для работы с функциями Windows, например, времени системы
+#include <thread> // Подключение библиотеки для использования функции sleep_for для пауз в выполнении
+#include <chrono> // Подключение библиотеки для работы с функциями времени
 
 // Объявление глобальных констант для ограничения размеров массива и записи данных
 const int MAX_NUMBER = 1000000000; // Ограничение на максимальное значение элементов массива
@@ -61,7 +61,7 @@ int main()
                 std::cin.clear();  // Сброс флага ошибки ввода
                 std::cin.ignore(); // Очистка оставшегося ввода
                 std::cout << "  ERROR: You entered the wrong size!!! \n  Please try again\n"; // Сообщение об ошибке
-                Sleep(2000);      // Задержка перед повторным вводом
+                std::this_thread::sleep_for(std::chrono::milliseconds(2000)); // Задержка перед повторным вводом
                 sizeError = true; // Установка флага ошибки
             }
         } while (sizeError); // Повтор запроса до корректного ввода
@@ -87,7 +87,7 @@ int main()
                 std::cout
                     << "  ERROR: Invalid input (e.g., number exceeds the limit or wrong format)!!!\n"; // Сообщение об
                                                                                                        // ошибке
-                Sleep(2000); // Задержка перед повторным вводом
+                std::this_thread::sleep_for(std::chrono::milliseconds(2000)); // Задержка перед повторным вводом
             }
         } while (array.getError() || !isSymbol); // Повтор, пока ввод некорректен
 
@@ -95,7 +95,7 @@ int main()
         std::cout << std::endl;
         std::cout << "Sorted array: ";
         array.printArray('[', ']'); // Вывод отсортированного массива в консоль
-        Sleep(2000);                // Задержка перед завершением цикла
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000)); // Задержка перед завершением цикла
         array.deleteArray();        // Удаление динамического массива
         std::cout << "\nTry again? ( 1=yes , 0=no ): "; // Запрос продолжения программы
         std::cin >> isProgram;                          // Чтение решения пользователя
