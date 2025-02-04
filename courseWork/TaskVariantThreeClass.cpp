@@ -49,7 +49,7 @@ int main()
         int arraySize = 0; // Переменная для хранения размера массива
         do
         {
-            std::system("cls"); // Очистка консоли перед вводом
+            std::cout << "\033[2J\033[1;1H"; // Очистка консоли перед вводом
             sizeError = false;  // Сброс флага ошибок
             std::cout << "Enter the size of array ( 1 <= size <= 100 ): "; // Запрос размера массива
             std::cin >> arraySize;                                         // Ввод размера массива
@@ -71,10 +71,9 @@ int main()
         std::string input; // Переменная для строки ввода значений массива
         std::regex pattern("^\\d+(\\s+\\d+)*$"); // Регулярное выражение для проверки формата ввода
         bool isSymbol = false; // Флаг корректности ввода
-
         do
         {
-            std::system("cls"); // Очистка консоли перед вводом
+            std::cout << "\033[2J\033[1;1H"; // Очистка консоли перед вводом
             std::cout << "The size of array: " << arraySize << std::endl
                       << "Enter the array ( natural numbers not exceeding 10^9 ): "; // Запрос значений массива
             std::getline(std::cin, input);               // Ввод строки значений массива

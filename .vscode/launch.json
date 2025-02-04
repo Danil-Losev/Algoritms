@@ -23,7 +23,7 @@
             },
             "launchCompleteCommand": "exec-run",
             "avoidWindowsConsoleRedirection": false,
-            "internalConsoleOptions": "neverOpen",
+            "internalConsoleOptions": "openOnSessionStart", //"neverOpen",
             "MIMode": "gdb",
             "miDebuggerPath": "c:/mingw64/bin/gdb.exe",
             "setupCommands": [
