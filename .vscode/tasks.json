@@ -2,6 +2,56 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Generate Assembly (GCC)",
+            "type": "shell",
+            "command": "C:\\mingw64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-std=c++17",
+                "-g",
+                "-S",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}_gcc.s"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Генерация ассемблерного кода с помощью GCC",
+            "presentation": {
+                "close": true
+            }
+        },
+        {
+            "label": "Generate Assembly (Clang)",
+            "type": "shell",
+            "command": "C:\\mingw64\\bin\\clang++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-std=c++17",
+                "-g",
+                "-S",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}_clang.s"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Генерация ассемблерного кода с помощью Clang",
+            "presentation": {
+                "close": true
+            }
+        },
+        {
             "type": "cppbuild",
             "label": "Build C++ file: g++.exe",
             "command": "C:\\mingw64\\bin\\g++.exe",

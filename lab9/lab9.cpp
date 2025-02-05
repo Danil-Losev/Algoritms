@@ -63,12 +63,12 @@ long long autoSortTestForArray(int *(*sort)(int *&, int), void (*fill)(int *&, i
 
 int main()
 {
-    int programm = 1; // Переменная для контроля основного цикла программы
+    int program = 1; // Переменная для контроля основного цикла программы
     int choose = 1;   // Выбор пользователем типа заполнения и сортировки
     int size = 1;     // Размер массива
     long long sortTime = 0; // Переменная для хранения времени сортировки
 
-    while (programm != 0) // Основной цикл программы, завершается при вводе 0
+    while (program != 0) // Основной цикл программы, завершается при вводе 0
     {
         std::system("cls"); // Очистка экрана перед вводом размера
         std::cout << "Enter the size of array: ";
@@ -160,7 +160,7 @@ int main()
 
         std::system("cls");
         std::cout << "Go to start? (1=yes 0=no)\n> ";
-        std::cin >> programm; // Проверка на повтор программы
+        std::cin >> program; // Проверка на повтор программы
     }
     return 0;
 }

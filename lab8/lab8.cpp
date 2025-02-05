@@ -364,7 +364,7 @@ void PrintList(Node *fHead)
         return;
     }
     Node *curNode = fHead;          // Указатель для прохода по узлам списка
-    while ((*curNode).next != NULL) // Перебор узлов до конца списка
+    while ((*curNode).next != nullptr) // Перебор узлов до конца списка
     {
         curNode = (*curNode).next;            // Переход к следующему узлу
         std::cout << (*curNode).value << ' '; // Вывод значения текущего узла
@@ -552,7 +552,7 @@ void arrayAutoTest(int fMaxSize)
 
 long long autoSortTestForList(Node *(*sort)(Node *), void (*fill)(Node *&, int), int fSize)
 {
-    Node *testHead = NULL;                         // Указатель на начало списка
+    Node *testHead = nullptr;                         // Указатель на начало списка
     fill(testHead, fSize);                         // Заполнение списка
     long long sortTime = 0;                        // Переменная для времени сортировки
     testHead = ListSort(sort, testHead, sortTime); // Сортировка списка
@@ -567,6 +567,6 @@ long long autoSortTestForArray(int *(*sort)(int *&, int), void (*fill)(int *&, i
     long long sortTime = 0;            // Переменная для времени сортировки
     testArray = ArraySort(sort, testArray, fSize, sortTime); // Сортировка массива
     delete[] testArray;                                      // Освобождение памяти
-    testArray = NULL;                                        // Обнуление указателя
+    testArray = nullptr;                                        // Обнуление указателя
     return sortTime;                                         // Возврат времени сортировки
 }
